@@ -6,7 +6,7 @@ window.onload = () => {
 
   const gameLoop = () => {
     game.runLogic();
-    setTimeout(gameLoop, 1000 / 72);
+    setTimeout(gameLoop, 1000 / 60);
   };
 
   gameLoop();

@@ -11,12 +11,58 @@ class Game {
     this.creator.createWalls();
     this.creator.createAisles();
     this.creator.createCheckouts();
+    this.createEnemies();
     this.createCharacter();
   }
 
   createCharacter() {
-    this.player = new Character(150, 150, this);
+    this.player = new Character(
+      this.canvas.width / 2 - 75,
+      this.canvas.height / 2 - 75,
+      this
+    );
     this.player.initialize();
+  }
+
+  createEnemies() {
+    this.enemy = new Enemy(1125 + 300, 325 + 75, this, [
+      'right',
+      'right',
+      'right',
+      'right',
+      'right',
+      'stop',
+      'down',
+      'down',
+      'down',
+      'stop',
+      'left',
+      'left',
+      'left',
+      'left',
+      'left',
+      'stop',
+      'left',
+      'left',
+      'left',
+      'stop',
+      'down',
+      'left',
+      'left',
+      'left',
+      'left',
+      'left',
+      'left',
+      'left',
+      'left',
+      'stop',
+      'down',
+      'down',
+      'down',
+      'right',
+      'right',
+    ]);
+    this.enemy.initialize();
   }
 
   moveBG(direction, nextX, nextY) {
@@ -50,6 +96,8 @@ class Game {
     for (let checkout of this.creator.checkouts) {
       checkout.move(direction);
     }
+    this.enemy.moveWithBG(direction);
+    //TODO Move enemies in relation to the background
   }
 
   runLogic() {
@@ -64,6 +112,8 @@ class Game {
       checkout.draw();
     }
     this.player.draw();
+    this.enemy.autonomousMovement();
+    this.enemy.draw();
   }
 
   setMoveControls() {

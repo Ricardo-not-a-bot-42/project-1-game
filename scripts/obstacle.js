@@ -1,7 +1,7 @@
 class Obstacle {
   constructor(x, y, id, source, game) {
-    this.x = x;
-    this.y = y;
+    this.x = x + 300;
+    this.y = y + 75;
     this.id = id;
     this.source = source;
     this.game = game;

@@ -151,10 +151,10 @@ class Creator {
       this.createWall(450, 225, 'fruit', '/images/aisle2/Fruit.png')
     );
     this.aisles.push(
-      this.createWall(1100, 225, 'cakes', '/images/aisle2/Cakes.png')
+      this.createWall(1125, 225, 'cakes', '/images/aisle2/Cakes.png')
     );
     this.aisles.push(
-      this.createWall(1100, 300, 'biologic', '/images/aisle2/Biological.png')
+      this.createWall(1125, 300, 'biologic', '/images/aisle2/Biological.png')
     );
 
     //Aisle 3
