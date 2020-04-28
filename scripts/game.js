@@ -2,6 +2,7 @@ class Game {
   constructor(canvas, context) {
     this.canvas = canvas;
     this.context = context;
+    this.gameRunning = true;
     this.createLevel();
     this.setMoveControls();
   }
@@ -11,7 +12,7 @@ class Game {
     this.creator.createWalls();
     this.creator.createAisles();
     this.creator.createCheckouts();
-    this.createEnemies();
+    this.creator.createEnemies();
     this.createCharacter();
   }
 
@@ -24,45 +25,12 @@ class Game {
     this.player.initialize();
   }
 
-  createEnemies() {
-    this.enemy = new Enemy(1125 + 300, 325 + 75, this, [
-      'right',
-      'right',
-      'right',
-      'right',
-      'right',
-      'stop',
-      'down',
-      'down',
-      'down',
-      'stop',
-      'left',
-      'left',
-      'left',
-      'left',
-      'left',
-      'stop',
-      'left',
-      'left',
-      'left',
-      'stop',
-      'down',
-      'left',
-      'left',
-      'left',
-      'left',
-      'left',
-      'left',
-      'left',
-      'left',
-      'stop',
-      'down',
-      'down',
-      'down',
-      'right',
-      'right',
-    ]);
-    this.enemy.initialize();
+  gameOver() {
+    this.gameRunning = false;
+    this.context.save();
+    this.context.fillStyle = 'rgba(71, 71, 71, 0.9)';
+    this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    this.context.restore();
   }
 
   moveBG(direction, nextX, nextY) {
@@ -96,8 +64,9 @@ class Game {
     for (let checkout of this.creator.checkouts) {
       checkout.move(direction);
     }
-    this.enemy.moveWithBG(direction);
-    //TODO Move enemies in relation to the background
+    for (let enemy of this.creator.enemies) {
+      enemy.moveWithBG(direction);
+    }
   }
 
   runLogic() {
@@ -111,9 +80,18 @@ class Game {
     for (let checkout of this.creator.checkouts) {
       checkout.draw();
     }
-    this.player.draw();
-    this.enemy.autonomousMovement();
-    this.enemy.draw();
+    this.player.runLogic();
+
+    for (let enemy of this.creator.enemies) {
+      enemy.autonomousMovement();
+      enemy.draw();
+    }
+
+    for (let enemy of this.creator.enemies) {
+      if (this.player.checkCollision(enemy, 0, 0)) {
+        this.player.decreaseHealth();
+      }
+    }
   }
 
   setMoveControls() {
@@ -135,6 +113,9 @@ class Game {
           this.moveBG(3, 5, 0);
           event.preventDefault();
           break;
+        case 32:
+          this.player.useSpray();
+          event.preventDefault();
       }
     });
   }

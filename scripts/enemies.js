@@ -78,48 +78,19 @@ class Enemy {
     }
   }
 
-  checkCollision(player, nextX, nextY) {
-    return (
-      player.y + player.height / 2 < nextY + this.height &&
-      player.y + player.height > nextY + this.height / 2 &&
-      player.x + player.width > nextX &&
-      player.x < nextX + this.width
-    );
-  }
-
   move(direction) {
     switch (direction) {
       case 0:
-        if (!this.checkCollision(this.game.player, this.x, this.y - 5)) {
-          this.y -= 2.5;
-        } else {
-          console.log('dead');
-          delete this;
-        }
+        this.y -= 2.5;
         break;
       case 1:
-        if (!this.checkCollision(this.game.player, this.x + 5, this.y)) {
-          this.x += 2.5;
-        } else {
-          console.log('dead');
-          delete this;
-        }
+        this.x += 2.5;
         break;
       case 2:
-        if (!this.checkCollision(this.game.player, this.x, this.y + 5)) {
-          this.y += 2.5;
-        } else {
-          console.log('dead');
-          delete this;
-        }
+        this.y += 2.5;
         break;
       case 3:
-        if (!this.checkCollision(this.game.player, this.x - 5, this.y)) {
-          this.x -= 2.5;
-        } else {
-          console.log('dead');
-          delete this;
-        }
+        this.x -= 2.5;
         break;
     }
   }

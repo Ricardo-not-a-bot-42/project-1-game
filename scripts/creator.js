@@ -398,4 +398,47 @@ class Creator {
     wall.initialize();
     return wall;
   }
+
+  createEnemies() {
+    this.enemies = [];
+    let enemy = new Enemy(1125 + 300, 325 + 75, this.game, [
+      'right',
+      'right',
+      'right',
+      'right',
+      'right',
+      'stop',
+      'down',
+      'down',
+      'down',
+      'stop',
+      'left',
+      'left',
+      'left',
+      'left',
+      'left',
+      'stop',
+      'left',
+      'left',
+      'left',
+      'stop',
+      'down',
+      'left',
+      'left',
+      'left',
+      'left',
+      'left',
+      'left',
+      'left',
+      'left',
+      'stop',
+      'down',
+      'down',
+      'down',
+      'right',
+      'right',
+    ]);
+    enemy.initialize();
+    this.enemies.push(enemy);
+  }
 }
