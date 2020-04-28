@@ -3,6 +3,8 @@ class Game {
     this.canvas = canvas;
     this.context = context;
     this.gameRunning = true;
+    this.listImage = new Image();
+    this.listImage.src = '/images/postit.png';
     this.createLevel();
     this.setMoveControls();
   }
@@ -13,6 +15,7 @@ class Game {
     this.creator.createAisles();
     this.creator.createCheckouts();
     this.creator.createEnemies();
+    this.creator.createItemList(false);
     this.createCharacter();
   }
 
@@ -31,6 +34,39 @@ class Game {
     this.context.fillStyle = 'rgba(71, 71, 71, 0.9)';
     this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
     this.context.restore();
+  }
+
+  initializeItemList() {
+    this.image.addEventListener('load', () => {
+      this.context.drawImage(
+        this.listImage,
+        this.canvas.width - 200,
+        20,
+        100,
+        100
+      );
+    });
+  }
+
+  drawItemList() {
+    this.context.drawImage(
+      this.listImage,
+      this.canvas.width - 160,
+      -37,
+      150,
+      200
+    );
+    for (let i = 0; i < this.creator.items.length; i++) {
+      this.context.save();
+      this.context.font = 'bold 18px Indie Flower';
+      this.context.fillStyle = 'black';
+      this.context.fillText(
+        '- ' + this.creator.items[i].id,
+        this.canvas.width - 150,
+        25 + 30 * i
+      );
+      this.context.restore();
+    }
   }
 
   moveBG(direction, nextX, nextY) {
@@ -67,6 +103,9 @@ class Game {
     for (let enemy of this.creator.enemies) {
       enemy.moveWithBG(direction);
     }
+    for (let item of this.creator.items) {
+      item.moveWithBG(direction);
+    }
   }
 
   runLogic() {
@@ -80,18 +119,33 @@ class Game {
     for (let checkout of this.creator.checkouts) {
       checkout.draw();
     }
+
+    for (let item of this.creator.items) {
+      item.draw();
+    }
+
+    for (let enemy of this.creator.enemies) {
+      if (enemy.y < this.player.y) {
+        enemy.autonomousMovement();
+        enemy.draw();
+      }
+    }
+
     this.player.runLogic();
 
     for (let enemy of this.creator.enemies) {
-      enemy.autonomousMovement();
-      enemy.draw();
+      if (enemy.y >= this.player.y) {
+        enemy.autonomousMovement();
+        enemy.draw();
+      }
     }
-
     for (let enemy of this.creator.enemies) {
-      if (this.player.checkCollision(enemy, 0, 0)) {
+      if (this.player.checkCollision(enemy, 0, 0, 1)) {
         this.player.decreaseHealth();
       }
     }
+
+    this.drawItemList();
   }
 
   setMoveControls() {
@@ -115,6 +169,10 @@ class Game {
           break;
         case 32:
           this.player.useSpray();
+          event.preventDefault();
+          break;
+        case 69:
+          this.player.pickItem();
           event.preventDefault();
       }
     });

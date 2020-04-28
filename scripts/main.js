@@ -3,7 +3,11 @@ const $context = $canvas.getContext('2d');
 const $beginButton = document.querySelector('#start-button');
 
 window.onload = () => {
-  const game = new Game($canvas, $context);
+  let game;
+  $beginButton.addEventListener('click', () => {
+    game = new Game($canvas, $context);
+    gameLoop();
+  });
 
   const gameLoop = () => {
     game.runLogic();
@@ -11,8 +15,4 @@ window.onload = () => {
       setTimeout(gameLoop, 1000 / 60);
     }
   };
-
-  $beginButton.addEventListener('click', () => {
-    gameLoop();
-  });
 };

@@ -7,8 +7,8 @@ class Obstacle {
     this.game = game;
     this.image = new Image();
     this.image.src = source;
-    this.width = 0;
-    this.height = 0;
+    this.width = this.image.width;
+    this.height = this.image.height;
   }
 
   initialize() {

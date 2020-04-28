@@ -14,10 +14,14 @@ class Character {
     this.invnImage = new Image();
     this.invnImage.src = '/images/Enemy.png';
 
+    this.bgImage = new Image();
+    this.bgImage.src = '/images/virusBG.png';
     this.hpImage = new Image();
     this.hpImage.src = '/images/virus.png';
     this.sprayImage = new Image();
-    this.sprayImage.src = '/images/spray.png';
+    this.sprayImage.src = '/images/sprayBottle.png';
+    this.sprayQuantity = new Image();
+    this.sprayQuantity.src = '/images/sprayQuantity.png';
   }
 
   initialize() {
@@ -36,6 +40,7 @@ class Character {
   }
 
   draw() {
+    this.drawBG();
     this.drawCharacter();
     this.drawHealth();
     this.drawSpray();
@@ -49,9 +54,13 @@ class Character {
     }
   }
 
+  drawBG() {
+    this.game.context.drawImage(this.bgImage, 10, 100, 50, 290);
+  }
+
   drawHealth() {
     for (let i = 0; i < 5 - this.hp; i++) {
-      this.game.context.drawImage(this.hpImage, 20 + i * 60, 10, 50, 50);
+      this.game.context.drawImage(this.hpImage, 10, 100 + i * 60, 50, 50);
     }
   }
 
@@ -65,17 +74,20 @@ class Character {
     }
   }
 
-  checkCollision(enemy, offsetX, offsetY) {
+  checkCollision(enemy, offsetX, offsetY, heightDiff) {
     return (
-      enemy.y + enemy.height / 2 < this.y + this.height + offsetY &&
-      enemy.y + enemy.height + offsetY > this.y + this.height / 2 &&
+      enemy.y + (enemy.height * heightDiff) / 2 <
+        this.y + this.height + offsetY &&
+      enemy.y + enemy.height + offsetY >
+        this.y + (this.height * heightDiff) / 2 &&
       enemy.x + enemy.width + offsetX > this.x &&
       enemy.x < this.x + this.width + offsetX
     );
   }
 
   drawSpray() {
-    this.game.context.drawImage(this.sprayImage, 20, 70, 50, 50);
+    this.game.context.drawImage(this.sprayImage, 15, 10, 50, 75);
+    this.game.context.drawImage(this.sprayQuantity, 16, 35, 42, 49);
     this.game.context.save();
     this.game.context.font = '20px sans-serif';
     this.game.context.fillStyle = 'white';
@@ -84,10 +96,25 @@ class Character {
   }
 
   useSpray() {
-    console.log('used spray');
-    for (let enemy of this.game.creator.enemies) {
-      if (this.checkCollision(enemy, 100, 100)) {
-        console.log('sprayed');
+    if (this.sprayAmount >= 5) {
+      this.sprayAmount -= 5;
+      for (let enemy of this.game.creator.enemies) {
+        if (this.checkCollision(enemy, 100, 100, 1)) {
+          enemy.sprayedTime = 120;
+        }
+      }
+    }
+  }
+
+  pickItem() {
+    for (let item of this.game.creator.items) {
+      if (this.checkCollision(item, 5, 5, 0)) {
+        let index = this.game.creator.items.indexOf(item);
+        this.game.creator.items.splice(index, 1);
+        if (this.game.creator.items.length === 0) {
+          this.game.creator.createItemList(true);
+        }
+        console.log(this.game.creator.items);
       }
     }
   }
