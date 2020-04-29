@@ -4,6 +4,7 @@ class Enemy {
     this.y = y;
     this.width = 125;
     this.height = 125;
+    this.speed = 30;
     this.sprayedTime = 0;
     this.iteration = 0;
     this.pauseTime = 0;
@@ -33,37 +34,42 @@ class Enemy {
       this.sprayedTime--;
       return;
     }
-
-    switch (this.moveSet[this.iteration]) {
-      case 'up':
-        this.move(0);
-        if (this.pauseTime === 0) {
-          this.pauseTime = 30;
-        }
-        break;
-      case 'right':
-        this.move(1);
-        if (this.pauseTime === 0) {
-          this.pauseTime = 30;
-        }
-        break;
-      case 'down':
-        this.move(2);
-        if (this.pauseTime === 0) {
-          this.pauseTime = 30;
-        }
-        break;
-      case 'left':
-        this.move(3);
-        if (this.pauseTime === 0) {
-          this.pauseTime = 30;
-        }
-        break;
-      case 'stop':
-        if (this.pauseTime === 0) {
-          this.pauseTime = 150;
-        }
-        break;
+    if (this.moveSet[this.iteration] !== undefined) {
+      switch (true) {
+        case this.moveSet[this.iteration].includes('up'):
+          this.move(0);
+          if (this.pauseTime === 0) {
+            this.pauseTime =
+              this.speed * parseInt(this.moveSet[this.iteration]);
+          }
+          break;
+        case this.moveSet[this.iteration].includes('right'):
+          this.move(1);
+          if (this.pauseTime === 0) {
+            this.pauseTime =
+              this.speed * parseInt(this.moveSet[this.iteration]);
+          }
+          break;
+        case this.moveSet[this.iteration].includes('down'):
+          this.move(2);
+          if (this.pauseTime === 0) {
+            this.pauseTime =
+              this.speed * parseInt(this.moveSet[this.iteration]);
+          }
+          break;
+        case this.moveSet[this.iteration].includes('left'):
+          this.move(3);
+          if (this.pauseTime === 0) {
+            this.pauseTime =
+              this.speed * parseInt(this.moveSet[this.iteration]);
+          }
+          break;
+        case this.moveSet[this.iteration].includes('stop'):
+          if (this.pauseTime === 0) {
+            this.pauseTime = 150;
+          }
+          break;
+      }
     }
 
     if (this.pauseTime > 1) {
@@ -74,23 +80,23 @@ class Enemy {
       this.pauseTime = 0;
       this.iteration++;
     } else {
-      // this.iteration = 0;
+      this.iteration = 0;
     }
   }
 
   move(direction) {
     switch (direction) {
       case 0:
-        this.y -= 2.5;
+        this.y -= 75 / this.speed;
         break;
       case 1:
-        this.x += 2.5;
+        this.x += 75 / this.speed;
         break;
       case 2:
-        this.y += 2.5;
+        this.y += 75 / this.speed;
         break;
       case 3:
-        this.x -= 2.5;
+        this.x -= 75 / this.speed;
         break;
     }
   }

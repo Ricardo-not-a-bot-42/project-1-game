@@ -154,7 +154,7 @@ class Creator {
       this.createWall(1125, 225, 'Cake', '/images/aisle2/Cakes.png')
     );
     this.aisles.push(
-      this.createWall(1125, 300, 'Biologic', '/images/aisle2/Biological.png')
+      this.createWall(1125, 300, 'Tofu', '/images/aisle2/Biological.png')
     );
 
     //Aisle 3
@@ -365,13 +365,13 @@ class Creator {
 
     //Side
     this.aisles.push(
-      this.createWall(1650, 150, 'fish', '/images/side/Fish.png')
+      this.createWall(1650, 150, 'Fish', '/images/side/Fish.png')
     );
     this.aisles.push(
-      this.createWall(1650, 525, 'take-away', '/images/side/Take-Away.png')
+      this.createWall(1650, 525, 'Take-away', '/images/side/Take-Away.png')
     );
     this.aisles.push(
-      this.createWall(1650, 1200, 'meat', '/images/side/Meat.png')
+      this.createWall(1650, 1200, 'Meat', '/images/side/Meat.png')
     );
   }
 
@@ -399,47 +399,66 @@ class Creator {
     return wall;
   }
 
-  createEnemies() {
-    this.enemies = [];
-    let enemy = new Enemy(1125 + 300, 325 + 75, this.game, [
-      'right',
-      'right',
-      'right',
-      'right',
-      'right',
-      'stop',
-      'down',
-      'down',
-      'down',
-      'stop',
-      'left',
-      'left',
-      'left',
-      'left',
-      'left',
-      'stop',
-      'left',
-      'left',
-      'left',
-      'stop',
-      'down',
-      'left',
-      'left',
-      'left',
-      'left',
-      'left',
-      'left',
-      'left',
-      'left',
-      'stop',
-      'down',
-      'down',
-      'down',
-      'right',
-      'right',
-    ]);
+  createEnemy(x, y, commandList) {
+    let enemy = new Enemy(x + 300, y + 75, this.game, commandList);
     enemy.initialize();
-    this.enemies.push(enemy);
+    return enemy;
+  }
+
+  createEnemyList() {
+    this.enemies = [];
+    this.enemies.push(
+      this.createEnemy(1125, 325, [
+        '5-right',
+        'stop',
+        '3-down',
+        '5-left',
+        'stop',
+        '3-left',
+        'stop',
+        '1-down',
+        '8-left',
+        'stop',
+        '3-down',
+        '5-right',
+        'stop',
+        '10-right',
+        '4-down',
+        '9-left',
+        '1-down',
+        'stop',
+        '6-left',
+        '12-up',
+        '11-right',
+        'stop',
+      ])
+    );
+    this.enemies.push(
+      this.createEnemy(450, 125, [
+        '1-right',
+        '1-up',
+        'stop',
+        '4-right',
+        'stop',
+        '2-down',
+        '2-right',
+        '1-up',
+        '2-right',
+        'stop',
+        '1-up',
+        '4-right',
+        'stop',
+        '4-down',
+        '4-left',
+        'stop',
+        '7-left',
+        'stop',
+        '4-left',
+        '3-up',
+        '2-right',
+        'stop',
+      ])
+    );
   }
 
   createItemList(reDraw) {

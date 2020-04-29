@@ -2,11 +2,24 @@ class Game {
   constructor(canvas, context) {
     this.canvas = canvas;
     this.context = context;
+    this.isGameOver = false;
+    this.isGameWon = false;
+    this.checkoutsAvailable = false;
+    this.setup();
+    this.setMoveControls();
+  }
+
+  setup() {
     this.gameRunning = true;
+    this.isGameWon = false;
+    this.isGameOver = false;
+    this.level = 1;
+    this.score = 0;
+    this.baseScoreMultiplier = 1;
+
     this.listImage = new Image();
     this.listImage.src = '/images/postit.png';
     this.createLevel();
-    this.setMoveControls();
   }
 
   createLevel() {
@@ -14,7 +27,7 @@ class Game {
     this.creator.createWalls();
     this.creator.createAisles();
     this.creator.createCheckouts();
-    this.creator.createEnemies();
+    this.creator.createEnemyList();
     this.creator.createItemList(false);
     this.createCharacter();
   }
@@ -31,8 +44,60 @@ class Game {
   gameOver() {
     this.gameRunning = false;
     this.context.save();
-    this.context.fillStyle = 'rgba(71, 71, 71, 0.9)';
-    this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    this.context.fillStyle = 'white';
+    this.context.textAlign = 'center';
+    this.context.font = 'bold 64px Indie Flower';
+    this.context.fillText(
+      'Game Over',
+      this.canvas.width / 2,
+      this.canvas.height / 2 - 200
+    );
+    this.context.font = 'bold 32px Indie Flower';
+    this.context.fillText(
+      'You took one too many hits! better luck next time!',
+      this.canvas.width / 2,
+      this.canvas.height / 2 - 100
+    );
+    this.context.fillText(
+      'To win, you must go to the checkout when ready!',
+      this.canvas.width / 2,
+      this.canvas.height / 2
+    );
+    this.context.fillText(
+      'Press restart to try again!',
+      this.canvas.width / 2,
+      this.canvas.height / 2 + 100
+    );
+    this.context.restore();
+  }
+
+  gameWon() {
+    this.gameRunning = false;
+    this.context.save();
+    this.context.fillStyle = 'white';
+    this.context.textAlign = 'center';
+    this.context.font = 'bold 64px Indie Flower';
+    this.context.fillText(
+      'Game Won',
+      this.canvas.width / 2,
+      this.canvas.height / 2 - 200
+    );
+    this.context.font = 'bold 32px Indie Flower';
+    this.context.fillText(
+      'You dodged everyone like a pro!',
+      this.canvas.width / 2,
+      this.canvas.height / 2 - 100
+    );
+    this.context.fillText(
+      `Your score was: ${this.score}`,
+      this.canvas.width / 2,
+      this.canvas.height / 2
+    );
+    this.context.fillText(
+      'Play again to improve your score!',
+      this.canvas.width / 2,
+      this.canvas.height / 2 + 100
+    );
     this.context.restore();
   }
 
@@ -69,6 +134,22 @@ class Game {
     }
   }
 
+  drawInfo() {
+    this.context.save();
+    this.context.font = 'bold 22px Indie Flower';
+    this.context.fillStyle = 'black';
+    this.context.textAlign = 'right';
+    this.context.fillText(
+      'Score(x' +
+        Math.round(this.baseScoreMultiplier * 10) / 10 +
+        '): ' +
+        this.score,
+      this.canvas.width - 20,
+      this.canvas.height - 20
+    );
+    this.context.restore();
+  }
+
   moveBG(direction, nextX, nextY) {
     for (let wall of this.creator.walls) {
       if (wall.checkCollision(this.player, wall.x + nextX, wall.y + nextY)) {
@@ -88,6 +169,10 @@ class Game {
           checkout.y + nextY
         )
       ) {
+        if (this.checkoutsAvailable) {
+          this.isGameWon = true;
+          this.gameRunning = false;
+        }
         return;
       }
     }
@@ -144,36 +229,38 @@ class Game {
         this.player.decreaseHealth();
       }
     }
-
     this.drawItemList();
+    this.drawInfo();
   }
 
   setMoveControls() {
     window.addEventListener('keydown', (event) => {
-      switch (event.keyCode) {
-        case 87:
-          this.moveBG(0, 0, 5);
-          event.preventDefault();
-          break;
-        case 68:
-          this.moveBG(1, -5, 0);
-          event.preventDefault();
-          break;
-        case 83:
-          this.moveBG(2, 0, -5);
-          event.preventDefault();
-          break;
-        case 65:
-          this.moveBG(3, 5, 0);
-          event.preventDefault();
-          break;
-        case 32:
-          this.player.useSpray();
-          event.preventDefault();
-          break;
-        case 69:
-          this.player.pickItem();
-          event.preventDefault();
+      if (this.gameRunning) {
+        switch (event.keyCode) {
+          case 87:
+            this.moveBG(0, 0, 5);
+            event.preventDefault();
+            break;
+          case 68:
+            this.moveBG(1, -5, 0);
+            event.preventDefault();
+            break;
+          case 83:
+            this.moveBG(2, 0, -5);
+            event.preventDefault();
+            break;
+          case 65:
+            this.moveBG(3, 5, 0);
+            event.preventDefault();
+            break;
+          case 32:
+            this.player.useSpray();
+            event.preventDefault();
+            break;
+          case 69:
+            this.player.pickItem();
+            event.preventDefault();
+        }
       }
     });
   }
