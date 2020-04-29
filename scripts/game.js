@@ -29,6 +29,8 @@ class Game {
     this.creator.createCheckouts();
     this.creator.createEnemyList();
     this.creator.createItemList(false);
+    this.creator.createSprayPickup();
+    this.creator.createHealthPickup();
     this.createCharacter();
   }
 
@@ -191,6 +193,12 @@ class Game {
     for (let item of this.creator.items) {
       item.moveWithBG(direction);
     }
+    if (this.creator.sprayPickup) {
+      this.creator.sprayPickup.moveWithBG(direction);
+    }
+    if (this.creator.healthPickup) {
+      this.creator.healthPickup.moveWithBG(direction);
+    }
   }
 
   runLogic() {
@@ -206,7 +214,14 @@ class Game {
     }
 
     for (let item of this.creator.items) {
-      item.draw();
+      item.draw('purple');
+    }
+
+    if (this.creator.sprayPickup) {
+      this.creator.sprayPickup.draw('blue');
+    }
+    if (this.creator.healthPickup) {
+      this.creator.healthPickup.draw('green');
     }
 
     for (let enemy of this.creator.enemies) {

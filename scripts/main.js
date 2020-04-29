@@ -28,7 +28,7 @@ window.onload = () => {
   });
 
   $pauseButton.addEventListener('click', () => {
-    if (!game.isGameOver) {
+    if (!game.isGameOver && !game.isGameWon) {
       game.gameRunning ? (game.gameRunning = false) : (game.gameRunning = true);
       gameLoop();
     }

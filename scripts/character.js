@@ -145,11 +145,31 @@ class Character {
           this.game.checkoutsAvailable = true;
           this.game.creator.createItemList(true);
           this.game.level += 1;
+          this.game.creator.createSprayPickup();
+          this.game.creator.createHealthPickup();
           for (let enemy of this.game.creator.enemies) {
             enemy.speed--;
           }
         }
         console.log(this.game.creator.items);
+      }
+    }
+
+    if (this.game.creator.sprayPickup) {
+      if (this.checkCollision(this.game.creator.sprayPickup, 0, 0, 0)) {
+        this.sprayAmount += Math.min(
+          Math.floor(Math.random() * 30 + 10),
+          100 - this.sprayAmount
+        );
+        this.game.creator.sprayPickup = undefined;
+      }
+    }
+    if (this.game.creator.healthPickup) {
+      if (this.checkCollision(this.game.creator.healthPickup, 0, 0, 0)) {
+        if (this.hp < 5) {
+          this.hp++;
+        }
+        this.game.creator.healthPickup = undefined;
       }
     }
   }

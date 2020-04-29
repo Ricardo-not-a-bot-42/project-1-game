@@ -467,17 +467,44 @@ class Creator {
       let aisleList = this.aisles[
         Math.floor(Math.random() * this.aisles.length)
       ].id;
-      console.log(aisleList);
       this.items.push(this.createItems(aisleList, reDraw));
     }
   }
 
   createItems(id, reDraw) {
-    let item = new Item(id, this.game);
+    let item = new Product(this.game, id);
     if (reDraw) {
       item.reDraw();
     }
     item.draw();
     return item;
+  }
+
+  createSprayPickup() {
+    let positions = [
+      [this.walls[11].x - 75, this.walls[11].y],
+      [this.walls[12].x - 75, this.walls[12].y + 150],
+      [this.walls[13].x - 75, this.walls[13].y + 300],
+      [this.walls[7].x + 75, this.walls[7].y + 75],
+      [this.walls[4].x + 150, this.walls[4].y],
+    ];
+    console.log(this.walls[11]);
+    let randomPos = Math.floor(Math.random() * positions.length);
+    this.sprayPickup = new Pickup(this.game, positions[randomPos]);
+    this.sprayPickup.draw();
+  }
+
+  createHealthPickup() {
+    let positions = [
+      [this.walls[12].x - 75, this.walls[12].y],
+      [this.walls[13].x - 75, this.walls[13].y + 75],
+      [this.walls[3].x + 150, this.walls[3].y],
+      [this.walls[5].x + 150, this.walls[5].y],
+      [this.walls[10].x + 975, this.walls[10].y],
+    ];
+    console.log(this.walls[11]);
+    let randomPos = Math.floor(Math.random() * positions.length);
+    this.healthPickup = new Pickup(this.game, positions[randomPos]);
+    this.healthPickup.draw();
   }
 }
