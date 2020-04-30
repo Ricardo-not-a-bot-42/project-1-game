@@ -5,13 +5,17 @@ class Item {
     this.y;
     this.width = 75;
     this.height = 75;
+
+    this.image = new Image();
   }
 
-  draw(color) {
-    this.game.context.save();
-    this.game.context.fillStyle = color;
-    this.game.context.fillRect(this.x, this.y, 75, 75);
-    this.game.context.restore();
+  draw(url) {
+    this.image.src = url;
+    this.game.context.drawImage(this.image, this.x, this.y, 75, 75);
+    // this.game.context.save();
+    // this.game.context.fillStyle = color;
+    // this.game.context.fillRect(this.x, this.y, 75, 75);
+    // this.game.context.restore();
   }
 
   moveWithBG(direction) {
@@ -64,8 +68,8 @@ class Product extends Item {
     }
   }
 
-  draw(color) {
-    super.draw(color);
+  draw(url) {
+    super.draw(url);
   }
 
   moveWithBG(direction) {
@@ -80,8 +84,8 @@ class Pickup extends Item {
     this.y = positions[1];
   }
 
-  draw(color) {
-    super.draw(color);
+  draw(url) {
+    super.draw(url);
   }
 
   moveWithBG(direction) {

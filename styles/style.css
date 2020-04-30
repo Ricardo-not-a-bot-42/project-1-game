@@ -8,8 +8,9 @@ body {
 }
 
 canvas {
-  border: 5px solid green;
-  display: block;
+  background-color: #33312d;
+  border: 5px solid #33312d;
+  display: none;
   padding-left: 0;
   padding-right: 0;
   margin-left: auto;

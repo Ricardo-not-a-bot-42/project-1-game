@@ -5,8 +5,22 @@ class Game {
     this.isGameOver = false;
     this.isGameWon = false;
     this.checkoutsAvailable = false;
+    this.bgMusic = new Audio();
+    this.bgMusic.src = '/sounds/bgMusic.wav';
     this.setup();
     this.setMoveControls();
+
+    this.checkoutAvailableSound = new Audio();
+    this.checkoutAvailableSound.src = '/sounds/announcement.mp3';
+    this.checkoutAvailableVoice = new Audio();
+    this.checkoutAvailableVoice.src = '/sounds/Voice.mp3';
+
+    this.gameWinSound = new Audio();
+    this.gameWinSound.src = '/sounds/win.wav';
+    this.registerSound = new Audio();
+    this.registerSound.src = '/sounds/register.mp3';
+    this.gameLoseSound = new Audio();
+    this.gameLoseSound.src = '/sounds/lose.wav';
   }
 
   setup() {
@@ -15,8 +29,11 @@ class Game {
     this.isGameOver = false;
     this.level = 1;
     this.score = 0;
+    this.itemsBought = [];
     this.baseScoreMultiplier = 1;
-
+    this.bgMusic.loop = true;
+    this.bgMusic.volume = 0.2;
+    this.bgMusic.play();
     this.listImage = new Image();
     this.listImage.src = '/images/postit.png';
     this.createLevel();
@@ -24,6 +41,7 @@ class Game {
 
   createLevel() {
     this.creator = new Creator(this);
+    this.creator.createFloor();
     this.creator.createWalls();
     this.creator.createAisles();
     this.creator.createCheckouts();
@@ -44,6 +62,8 @@ class Game {
   }
 
   gameOver() {
+    this.gameLoseSound.play();
+    this.bgMusic.pause();
     this.gameRunning = false;
     this.context.save();
     this.context.fillStyle = 'white';
@@ -74,31 +94,94 @@ class Game {
   }
 
   gameWon() {
+    this.registerSound.play();
+    this.registerSound.addEventListener('ended', () => {
+      this.gameWinSound.play();
+    });
+    this.bgMusic.pause();
     this.gameRunning = false;
     this.context.save();
-    this.context.fillStyle = 'white';
+    this.context.fillStyle = 'black';
     this.context.textAlign = 'center';
-    this.context.font = 'bold 64px Indie Flower';
+    this.context.font = 'bold 32px Source Code Pro';
     this.context.fillText(
-      'Game Won',
+      'SWEETEST DROP MARKET LTD.',
+      this.canvas.width / 2,
+      this.canvas.height / 2 - 250
+    );
+    this.context.font = '20px Source Code Pro';
+    let date = new Date();
+    this.context.fillText(
+      `${date.getDay()}/${date.getMonth()}/${date.getFullYear()} - ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`,
       this.canvas.width / 2,
       this.canvas.height / 2 - 200
     );
-    this.context.font = 'bold 32px Indie Flower';
+    this.context.font = 'bold 26px Source Code Pro';
     this.context.fillText(
-      'You dodged everyone like a pro!',
+      `**************************`,
       this.canvas.width / 2,
-      this.canvas.height / 2 - 100
+      this.canvas.height / 2 - 150
+    );
+    this.context.textAlign = 'left';
+    this.context.fillText(
+      `ITEMS:`,
+      this.canvas.width / 2 - 250,
+      this.canvas.height / 2 - 110
+    );
+    this.context.font = '22px Source Code Pro';
+    for (let i = 0; i < 5; i++) {
+      this.context.fillText(
+        this.itemsBought[i],
+        this.canvas.width / 2 - 200,
+        this.canvas.height / 2 - 30 * -(i + 1) - 100
+      );
+    }
+    this.context.fillText(
+      `+ ${this.itemsBought.length - 5}`,
+      this.canvas.width / 2 - 200,
+      this.canvas.height / 2 + 80
+    );
+    this.context.font = 'bold 20px Source Code Pro';
+    this.context.fillText(
+      `BASE SCORE:                       ${this.score}`,
+      this.canvas.width / 2 - 250,
+      this.canvas.height / 2 + 130
     );
     this.context.fillText(
-      `Your score was: ${this.score}`,
-      this.canvas.width / 2,
-      this.canvas.height / 2
+      `REMAINING HP:                     ${this.player.hp}(x1000)`,
+      this.canvas.width / 2 - 250,
+      this.canvas.height / 2 + 150
     );
+    this.context.fillText(
+      `REMAINING SPRAY:                  ${this.player.sprayAmount}(x20)`,
+      this.canvas.width / 2 - 250,
+      this.canvas.height / 2 + 170
+    );
+    this.context.fillText(
+      `__________________________________________`,
+      this.canvas.width / 2 - 250,
+      this.canvas.height / 2 + 180
+    );
+    this.context.font = 'bold 28px Source Code Pro';
+    this.context.fillText(
+      `TOTAL SCORE:            ${
+        this.score + this.player.hp * 1000 + this.player.sprayAmount * 20
+      }`,
+      this.canvas.width / 2 - 250,
+      this.canvas.height / 2 + 215
+    );
+    this.context.textAlign = 'center';
+    this.context.font = 'bold 26px Source Code Pro';
+    this.context.fillText(
+      `**************************`,
+      this.canvas.width / 2,
+      this.canvas.height / 2 + 250
+    );
+    this.context.font = 'bold 18px Source Code Pro';
     this.context.fillText(
       'Play again to improve your score!',
       this.canvas.width / 2,
-      this.canvas.height / 2 + 100
+      this.canvas.height / 2 + 275
     );
     this.context.restore();
   }
@@ -178,6 +261,9 @@ class Game {
         return;
       }
     }
+
+    this.creator.floor.move(direction);
+
     for (let wall of this.creator.walls) {
       wall.move(direction);
     }
@@ -203,6 +289,7 @@ class Game {
 
   runLogic() {
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.creator.floor.draw();
     for (let wall of this.creator.walls) {
       wall.draw();
     }
@@ -214,14 +301,14 @@ class Game {
     }
 
     for (let item of this.creator.items) {
-      item.draw('purple');
+      item.draw('/images/check-mark.png');
     }
 
     if (this.creator.sprayPickup) {
-      this.creator.sprayPickup.draw('blue');
+      this.creator.sprayPickup.draw('/images/spray.png');
     }
     if (this.creator.healthPickup) {
-      this.creator.healthPickup.draw('green');
+      this.creator.healthPickup.draw('/images/medicine-pills.png');
     }
 
     for (let enemy of this.creator.enemies) {
@@ -232,7 +319,6 @@ class Game {
     }
 
     this.player.runLogic();
-
     for (let enemy of this.creator.enemies) {
       if (enemy.y >= this.player.y) {
         enemy.autonomousMovement();

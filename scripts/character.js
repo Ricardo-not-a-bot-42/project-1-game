@@ -23,10 +23,21 @@ class Character {
     this.sprayImage.src = '/images/sprayBottle.png';
     this.sprayQuantity = new Image();
     this.sprayQuantity.src = '/images/sprayQuantity.png';
+
+    this.pickItemSound = new Audio();
+    this.pickItemSound.src = '/sounds/itemPick.wav';
+    this.pickPickupSound = new Audio();
+    this.pickPickupSound.src = '/sounds/healthPickup.wav';
+    this.sprayEmpty = new Audio();
+    this.sprayEmpty.src = '/sounds/sprayPickup.wav';
+    this.loseHpSound = new Audio();
+    //this.loseHpSound.src
+    this.useSpraySound = new Audio();
+    this.useSpraySound.src = '/sounds/sprayUse.wav';
   }
 
   initialize() {
-    this.hp = 5;
+    this.hp = 1;
     this.image.addEventListener('load', () => {
       this.game.context.drawImage(this.image, this.x, this.y);
       this.width = this.image.width;
@@ -107,12 +118,15 @@ class Character {
   useSpray() {
     if (this.sprayAmount >= 5) {
       this.sprayAmount -= 5;
+      this.useSpraySound.play();
       this.displaySpray = 60;
       for (let enemy of this.game.creator.enemies) {
         if (this.checkCollision(enemy, 100, 100, 1)) {
           enemy.sprayedTime = 120;
         }
       }
+    } else {
+      this.sprayEmpty.play();
     }
   }
 
@@ -137,12 +151,19 @@ class Character {
   pickItem() {
     for (let item of this.game.creator.items) {
       if (this.checkCollision(item, 5, 5, 0)) {
+        this.pickItemSound.play();
         let index = this.game.creator.items.indexOf(item);
+        this.game.itemsBought.push(this.game.creator.items[index].id);
+        console.log(this.game.itemsBought);
         this.game.creator.items.splice(index, 1);
         this.game.score += 100 * this.game.baseScoreMultiplier;
         this.game.baseScoreMultiplier += 0.1;
         if (this.game.creator.items.length === 0) {
-          this.game.checkoutsAvailable = true;
+          if (!this.game.checkoutsAvailable) {
+            this.game.checkoutsAvailable = true;
+            this.game.checkoutAvailableSound.play();
+            this.game.checkoutAvailableVoice.play();
+          }
           this.game.creator.createItemList(true);
           this.game.level += 1;
           this.game.creator.createSprayPickup();
@@ -157,6 +178,7 @@ class Character {
 
     if (this.game.creator.sprayPickup) {
       if (this.checkCollision(this.game.creator.sprayPickup, 0, 0, 0)) {
+        this.pickPickupSound.play();
         this.sprayAmount += Math.min(
           Math.floor(Math.random() * 30 + 10),
           100 - this.sprayAmount
@@ -166,6 +188,7 @@ class Character {
     }
     if (this.game.creator.healthPickup) {
       if (this.checkCollision(this.game.creator.healthPickup, 0, 0, 0)) {
+        this.pickPickupSound.play();
         if (this.hp < 5) {
           this.hp++;
         }

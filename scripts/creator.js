@@ -3,6 +3,11 @@ class Creator {
     this.game = game;
   }
 
+  createFloor() {
+    this.floor = new Obstacle(0, 0, 'floor', '/images/Floor.png', this.game);
+    this.floor.initialize();
+  }
+
   createWalls() {
     this.walls = [];
     this.walls.push(
@@ -325,7 +330,7 @@ class Creator {
       this.createWall(
         675,
         1800,
-        'Frozen food',
+        'Frozen peas',
         '/images/aisle13/Frozen Products.png'
       )
     );
@@ -354,13 +359,13 @@ class Creator {
 
     //Aisle 16
     this.aisles.push(
-      this.createWall(300, 1800, 'Red wine', '/images/aisle16/Wine-2.png')
+      this.createWall(300, 1800, 'Red wine', '/images/aisle16/Wine.png')
     );
     this.aisles.push(
-      this.createWall(75, 1800, 'White wine', '/images/aisle16/Wine.png')
+      this.createWall(75, 1800, 'White wine', '/images/aisle16/Wine-1.png')
     );
     this.aisles.push(
-      this.createWall(150, 2100, 'Champagne', '/images/aisle16/Wine-1.png')
+      this.createWall(150, 2100, 'Champagne', '/images/aisle16/Wine-2.png')
     );
 
     //Side
@@ -380,16 +385,16 @@ class Creator {
 
     //Aisle 1
     this.checkouts.push(
-      this.createWall(0, 450, 'checkout-1', '/images/checkouts/Checkout 1.png')
+      this.createWall(0, 510, 'checkout-1', '/images/checkouts/Checkout 1.png')
     );
     this.checkouts.push(
-      this.createWall(0, 750, 'checkout-2', '/images/checkouts/Checkout 1.png')
+      this.createWall(0, 810, 'checkout-2', '/images/checkouts/Checkout 1.png')
     );
     this.checkouts.push(
-      this.createWall(0, 1050, 'checkout-3', '/images/checkouts/Checkout 1.png')
+      this.createWall(0, 1110, 'checkout-3', '/images/checkouts/Checkout 1.png')
     );
     this.checkouts.push(
-      this.createWall(0, 1350, 'checkout-4', '/images/checkouts/Checkout 1.png')
+      this.createWall(0, 1410, 'checkout-4', '/images/checkouts/Checkout 1.png')
     );
   }
 
