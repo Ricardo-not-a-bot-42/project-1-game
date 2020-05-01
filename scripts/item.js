@@ -3,6 +3,8 @@ class Item {
     this.game = game;
     this.x;
     this.y;
+    this.velocityX = 0;
+    this.velocityY = 0;
     this.width = 75;
     this.height = 75;
 
@@ -18,21 +20,30 @@ class Item {
     // this.game.context.restore();
   }
 
-  moveWithBG(direction) {
-    switch (direction) {
-      case 0:
-        this.y += 5;
-        break;
-      case 1:
-        this.x -= 5;
-        break;
-      case 2:
-        this.y -= 5;
-        break;
-      case 3:
-        this.x += 5;
-        break;
-    }
+  addVelocity(x, y) {
+    this.velocityX = x;
+    this.velocityY = y;
+  }
+
+  moveWithBG() {
+    this.x += this.velocityX;
+    this.y += this.velocityY;
+    this.velocityX = this.velocityX / (1 + (15 / 1000) * 15);
+    this.velocityY = this.velocityY / (1 + (15 / 1000) * 15);
+    // switch (direction) {
+    //   case 0:
+    //     this.y += 5;
+    //     break;
+    //   case 1:
+    //     this.x -= 5;
+    //     break;
+    //   case 2:
+    //     this.y -= 5;
+    //     break;
+    //   case 3:
+    //     this.x += 5;
+    //     break;
+    // }
   }
 }
 
@@ -72,8 +83,8 @@ class Product extends Item {
     super.draw(url);
   }
 
-  moveWithBG(direction) {
-    super.moveWithBG(direction);
+  moveWithBG() {
+    super.moveWithBG();
   }
 }
 
@@ -88,7 +99,7 @@ class Pickup extends Item {
     super.draw(url);
   }
 
-  moveWithBG(direction) {
-    super.moveWithBG(direction);
+  moveWithBG() {
+    super.moveWithBG();
   }
 }

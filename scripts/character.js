@@ -2,7 +2,7 @@ class Character {
   constructor(x, y, game) {
     this.x = x;
     this.y = y;
-    this.width = 90;
+    this.width = 75;
     this.height = 100;
     this.hp = 5;
     this.invnFrames = 0;
@@ -11,7 +11,7 @@ class Character {
 
     this.game = game;
     this.image = new Image();
-    this.image.src = '/images/Player.png';
+    this.image.src = '/images/Player-F.png';
     this.invnImage = new Image();
     this.invnImage.src = '/images/Enemy.png';
 
@@ -31,7 +31,7 @@ class Character {
     this.sprayEmpty = new Audio();
     this.sprayEmpty.src = '/sounds/sprayPickup.wav';
     this.loseHpSound = new Audio();
-    //this.loseHpSound.src
+    this.loseHpSound.src = '/sounds/hit.wav';
     this.useSpraySound = new Audio();
     this.useSpraySound.src = '/sounds/sprayUse.wav';
   }
@@ -63,11 +63,7 @@ class Character {
   }
 
   drawCharacter() {
-    if (this.invnFrames <= 0) {
-      this.game.context.drawImage(this.image, this.x, this.y);
-    } else {
-      this.game.context.drawImage(this.invnImage, this.x, this.y);
-    }
+    this.game.context.drawImage(this.image, this.x, this.y, 100, 100);
   }
 
   drawBG() {
@@ -85,8 +81,9 @@ class Character {
       this.hp--;
       this.game.baseScoreMultiplier = 1;
       this.invnFrames += 300;
+      this.loseHpSound.volume = 0.3;
+      this.loseHpSound.play();
       if (this.hp <= 0) {
-        // this.game.gameOver();
         this.game.gameRunning = false;
         this.game.isGameOver = true;
       }

@@ -2,6 +2,8 @@ class Enemy {
   constructor(x, y, game, moveSet) {
     this.x = x;
     this.y = y;
+    this.velocityX = 0;
+    this.velocityY = 0;
     this.width = 100;
     this.height = 100;
     this.speed = 30;
@@ -25,8 +27,6 @@ class Enemy {
         this.width,
         this.height
       );
-      //this.width = this.image.width;
-      //this.height = this.image.height;
     });
   }
 
@@ -98,7 +98,7 @@ class Enemy {
       this.pauseTime = 0;
       this.iteration++;
     } else {
-      // this.iteration = 0;
+      this.iteration = 0;
     }
   }
 
@@ -131,20 +131,29 @@ class Enemy {
     }
   }
 
-  moveWithBG(direction) {
-    switch (direction) {
-      case 0:
-        this.y += 5;
-        break;
-      case 1:
-        this.x -= 5;
-        break;
-      case 2:
-        this.y -= 5;
-        break;
-      case 3:
-        this.x += 5;
-        break;
-    }
+  addVelocity(x, y) {
+    this.velocityX = x;
+    this.velocityY = y;
+  }
+
+  moveWithBG() {
+    this.x += this.velocityX;
+    this.y += this.velocityY;
+    this.velocityX = this.velocityX / (1 + (15 / 1000) * 15);
+    this.velocityY = this.velocityY / (1 + (15 / 1000) * 15);
+    //   switch (direction) {
+    //     case 0:
+    //       this.y += 5;
+    //       break;
+    //     case 1:
+    //       this.x -= 5;
+    //       break;
+    //     case 2:
+    //       this.y -= 5;
+    //       break;
+    //     case 3:
+    //       this.x += 5;
+    //       break;
+    //   }
   }
 }

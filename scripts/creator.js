@@ -511,7 +511,99 @@ class Creator {
         'stop',
       ])
     );
-    this.enemies.push(this.createEnemy(1125, 575, ['1-down']));
+    this.enemies.push(
+      this.createEnemy(150, 2000, [
+        '4-up',
+        '4-right',
+        '4-down',
+        '6-right',
+        'stop',
+        '9-right',
+        'stop',
+        '7-up',
+        '4-left',
+        'stop',
+        '4-left',
+        'stop',
+        '5-left',
+        '2-down',
+        '6-left',
+        '5-down',
+        'stop',
+      ])
+    );
+    this.enemies.push(
+      this.createEnemy(1200, 1175, [
+        '3-right',
+        '10-down',
+        '2-left',
+        'stop',
+        '1-down',
+        '7-left',
+        'stop',
+        '4-left',
+        '2-up',
+        'stop',
+        '5-up',
+        'stop',
+        '2-left',
+        '3-up',
+        '4-right',
+        'stop',
+        '1-up',
+        '8-right',
+        'stop',
+      ])
+    );
+    this.enemies.push(
+      this.createEnemy(1200, 1475, [
+        '3-right',
+        '3-down',
+        '3-left',
+        'stop',
+        '4-left',
+        'stop',
+        '4-left',
+        '3-up',
+        'stop',
+        '4-right',
+        'stop',
+        '4-right',
+        'stop',
+      ])
+    );
+    this.enemies.push(
+      this.createEnemy(900, 50, [
+        '8-right',
+        'stop',
+        '1-down',
+        '1-right',
+        '3-down',
+        'stop',
+        '5-down',
+        'stop',
+        '6-down',
+        '4-left',
+        'stop',
+        '8-left',
+        'stop',
+        '4-left',
+        '4-down',
+        '6-right',
+        'stop',
+        '10-right',
+        '8-up',
+        '11-left',
+        'stop',
+        '5-left',
+        '7-up',
+        '4-right',
+        'stop',
+        '3-right',
+        '4-up',
+        'stop',
+      ])
+    );
   }
 
   createItemList(reDraw) {

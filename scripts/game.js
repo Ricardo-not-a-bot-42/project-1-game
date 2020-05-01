@@ -237,58 +237,172 @@ class Game {
   }
 
   moveBG(direction, nextX, nextY) {
+    // for (let wall of this.creator.walls) {
+    //   if (wall.checkCollision(this.player, wall.x + nextX, wall.y + nextY)) {
+    //     return;
+    //   }
+    // }
+    // for (let aisle of this.creator.aisles) {
+    //   if (aisle.checkCollision(this.player, aisle.x + nextX, aisle.y + nextY)) {
+    //     return;
+    //   }
+    // }
+    // for (let checkout of this.creator.checkouts) {
+    //   if (
+    //     checkout.checkCollision(
+    //       this.player,
+    //       checkout.x + nextX,
+    //       checkout.y + nextY
+    //     )
+    //   ) {
+    //     if (this.checkoutsAvailable) {
+    //       this.isGameWon = true;
+    //       this.gameRunning = false;
+    //     }
+    //     return;
+    //   }
+    // }
+
+    this.creator.floor.addVelocity(nextX, nextY);
+
     for (let wall of this.creator.walls) {
-      if (wall.checkCollision(this.player, wall.x + nextX, wall.y + nextY)) {
-        return;
+      wall.addVelocity(nextX, nextY);
+    }
+    for (let aisle of this.creator.aisles) {
+      aisle.addVelocity(nextX, nextY);
+    }
+    for (let checkout of this.creator.checkouts) {
+      checkout.addVelocity(nextX, nextY);
+    }
+    for (let enemy of this.creator.enemies) {
+      enemy.addVelocity(nextX, nextY);
+    }
+    for (let item of this.creator.items) {
+      item.addVelocity(nextX, nextY);
+    }
+    if (this.creator.sprayPickup) {
+      this.creator.sprayPickup.addVelocity(nextX, nextY);
+    }
+    if (this.creator.healthPickup) {
+      this.creator.healthPickup.addVelocity(nextX, nextY);
+    }
+    // this.creator.floor.move(direction);
+
+    // for (let wall of this.creator.walls) {
+    //   wall.move(direction);
+    // }
+    // for (let aisle of this.creator.aisles) {
+    //   aisle.move(direction);
+    // }
+    // for (let checkout of this.creator.checkouts) {
+    //   checkout.move(direction);
+    // }
+    // for (let enemy of this.creator.enemies) {
+    //   enemy.moveWithBG(direction);
+    // }
+    // for (let item of this.creator.items) {
+    //   item.moveWithBG(direction);
+    // }
+    // if (this.creator.sprayPickup) {
+    //   this.creator.sprayPickup.moveWithBG(direction);
+    // }
+    // if (this.creator.healthPickup) {
+    //   this.creator.healthPickup.moveWithBG(direction);
+    // }
+  }
+
+  runLogic() {
+    if (this.isGameOver || this.isGameWon) {
+      return;
+    }
+    let collided = false;
+    for (let wall of this.creator.walls) {
+      if (
+        wall.checkCollision(
+          this.player,
+          wall.x + wall.velocityX,
+          wall.y + wall.velocityY
+        )
+      ) {
+        collided = true;
       }
     }
     for (let aisle of this.creator.aisles) {
-      if (aisle.checkCollision(this.player, aisle.x + nextX, aisle.y + nextY)) {
-        return;
+      if (
+        aisle.checkCollision(
+          this.player,
+          aisle.x + aisle.velocityX,
+          aisle.y + aisle.velocityY
+        )
+      ) {
+        collided = true;
       }
     }
     for (let checkout of this.creator.checkouts) {
       if (
         checkout.checkCollision(
           this.player,
-          checkout.x + nextX,
-          checkout.y + nextY
+          checkout.x + checkout.velocityX,
+          checkout.y + checkout.velocityY
         )
       ) {
         if (this.checkoutsAvailable) {
           this.isGameWon = true;
           this.gameRunning = false;
         }
-        return;
+        collided = true;
       }
     }
 
-    this.creator.floor.move(direction);
+    if (collided) {
+      this.creator.floor.addVelocity(0, 0);
+      for (let wall of this.creator.walls) {
+        wall.addVelocity(0, 0);
+      }
+      for (let aisle of this.creator.aisles) {
+        aisle.addVelocity(0, 0);
+      }
+      for (let checkout of this.creator.checkouts) {
+        checkout.addVelocity(0, 0);
+      }
+      for (let enemy of this.creator.enemies) {
+        enemy.addVelocity(0, 0);
+      }
+      for (let item of this.creator.items) {
+        item.addVelocity(0, 0);
+      }
+      if (this.creator.sprayPickup) {
+        this.creator.sprayPickup.addVelocity(0, 0);
+      }
+      if (this.creator.healthPickup) {
+        this.creator.healthPickup.addVelocity(0, 0);
+      }
+    }
 
-    for (let wall of this.creator.walls) {
-      wall.move(direction);
-    }
-    for (let aisle of this.creator.aisles) {
-      aisle.move(direction);
-    }
-    for (let checkout of this.creator.checkouts) {
-      checkout.move(direction);
-    }
     for (let enemy of this.creator.enemies) {
-      enemy.moveWithBG(direction);
+      enemy.moveWithBG();
     }
     for (let item of this.creator.items) {
-      item.moveWithBG(direction);
+      item.moveWithBG();
     }
+
     if (this.creator.sprayPickup) {
-      this.creator.sprayPickup.moveWithBG(direction);
+      this.creator.sprayPickup.moveWithBG();
     }
     if (this.creator.healthPickup) {
-      this.creator.healthPickup.moveWithBG(direction);
+      this.creator.healthPickup.moveWithBG();
     }
-  }
+    this.creator.floor.move();
 
-  runLogic() {
+    for (let wall of this.creator.walls) {
+      wall.move();
+    }
+    for (let aisle of this.creator.aisles) {
+      aisle.move();
+    }
+    for (let checkout of this.creator.checkouts) {
+      checkout.move();
+    }
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.creator.floor.draw();
     for (let wall of this.creator.walls) {
@@ -312,47 +426,66 @@ class Game {
       this.creator.healthPickup.draw('/images/medicine-pills.png');
     }
 
-    for (let enemy of this.creator.enemies) {
-      if (enemy.y < this.player.y) {
-        enemy.autonomousMovement();
-        enemy.draw();
+    if (!this.isGameOver && !this.isGameWon) {
+      for (let enemy of this.creator.enemies) {
+        if (enemy.y < this.player.y) {
+          enemy.autonomousMovement();
+          enemy.draw();
+        }
+      }
+
+      this.player.runLogic();
+      for (let enemy of this.creator.enemies) {
+        if (enemy.y >= this.player.y) {
+          enemy.autonomousMovement();
+          enemy.draw();
+        }
+      }
+      for (let enemy of this.creator.enemies) {
+        if (this.player.checkCollision(enemy, 0, 0, 1)) {
+          this.player.decreaseHealth();
+        }
       }
     }
 
-    this.player.runLogic();
-    for (let enemy of this.creator.enemies) {
-      if (enemy.y >= this.player.y) {
-        enemy.autonomousMovement();
-        enemy.draw();
-      }
-    }
-    for (let enemy of this.creator.enemies) {
-      if (this.player.checkCollision(enemy, 0, 0, 1)) {
-        this.player.decreaseHealth();
-      }
-    }
     this.drawItemList();
     this.drawInfo();
   }
 
   setMoveControls() {
     window.addEventListener('keydown', (event) => {
-      if (this.gameRunning) {
+      if (
+        this.gameRunning &&
+        this.isGameOver === false &&
+        this.isGameWon === false
+      ) {
         switch (event.keyCode) {
           case 87:
             this.moveBG(0, 0, 5);
+            if (this.player.image.src !== '/images/Player-B.png') {
+              this.player.image.src = '/images/Player-B.png';
+            }
             event.preventDefault();
             break;
           case 68:
             this.moveBG(1, -5, 0);
+            if (this.player.image.src !== '/images/Player-R.png') {
+              this.player.image.src = '/images/Player-R.png';
+            }
             event.preventDefault();
             break;
           case 83:
             this.moveBG(2, 0, -5);
+            if (this.player.image.src !== '/images/Player-F.png') {
+              this.player.image.src = '/images/Player-F.png';
+            }
             event.preventDefault();
             break;
           case 65:
             this.moveBG(3, 5, 0);
+            if (this.player.image.src !== '/images/Player-L.png') {
+              this.player.image.src = '/images/Player-L.png';
+            }
             event.preventDefault();
             break;
           case 32:

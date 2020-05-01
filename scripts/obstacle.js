@@ -2,6 +2,8 @@ class Obstacle {
   constructor(x, y, id, source, game) {
     this.x = x + 300;
     this.y = y + 75;
+    this.velocityX = 0;
+    this.velocityY = 0;
     this.id = id;
     this.source = source;
     this.game = game;
@@ -32,20 +34,31 @@ class Obstacle {
     );
   }
 
-  move(direction) {
-    switch (direction) {
-      case 0:
-        this.y += 5;
-        break;
-      case 1:
-        this.x -= 5;
-        break;
-      case 2:
-        this.y -= 5;
-        break;
-      case 3:
-        this.x += 5;
-        break;
-    }
+  addVelocity(x, y) {
+    this.velocityX = x;
+    this.velocityY = y;
   }
+
+  move() {
+    this.x += this.velocityX;
+    this.y += this.velocityY;
+    this.velocityX = this.velocityX / (1 + (15 / 1000) * 15);
+    this.velocityY = this.velocityY / (1 + (15 / 1000) * 15);
+  }
+  // move(direction) {
+  //   switch (direction) {
+  //     case 0:
+  //       this.y += 5;
+  //       break;
+  //     case 1:
+  //       this.x -= 5;
+  //       break;
+  //     case 2:
+  //       this.y -= 5;
+  //       break;
+  //     case 3:
+  //       this.x += 5;
+  //       break;
+  //   }
+  // }
 }
