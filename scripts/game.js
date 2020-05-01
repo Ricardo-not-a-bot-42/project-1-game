@@ -27,6 +27,7 @@ class Game {
     this.gameRunning = true;
     this.isGameWon = false;
     this.isGameOver = false;
+    this.checkoutsAvailable = false;
     this.level = 1;
     this.score = 0;
     this.itemsBought = [];

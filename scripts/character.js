@@ -2,8 +2,8 @@ class Character {
   constructor(x, y, game) {
     this.x = x;
     this.y = y;
-    this.width = 125;
-    this.height = 125;
+    this.width = 90;
+    this.height = 100;
     this.hp = 5;
     this.invnFrames = 0;
     this.sprayAmount = 100;
@@ -37,11 +37,11 @@ class Character {
   }
 
   initialize() {
-    this.hp = 1;
+    this.hp = 5;
     this.image.addEventListener('load', () => {
       this.game.context.drawImage(this.image, this.x, this.y);
-      this.width = this.image.width;
-      this.height = this.image.height;
+      //this.width = this.image.width;
+      //this.height = this.image.height;
     });
   }
 
@@ -121,7 +121,7 @@ class Character {
       this.useSpraySound.play();
       this.displaySpray = 60;
       for (let enemy of this.game.creator.enemies) {
-        if (this.checkCollision(enemy, 100, 100, 1)) {
+        if (this.checkCollision(enemy, 100, 120, 1)) {
           enemy.sprayedTime = 120;
         }
       }

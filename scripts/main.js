@@ -39,8 +39,8 @@ window.onload = () => {
   const gameLoop = () => {
     game.runLogic();
     if (game.gameRunning === true) {
-      //window.requestAnimationFrame((timestamp) => gameLoop(timestamp));
-      setTimeout(gameLoop, 1000 / 60);
+      window.requestAnimationFrame((timestamp) => gameLoop(timestamp));
+      //setTimeout(gameLoop, 1000 / 60);
       if (game.bgMusic.paused) {
         game.bgMusic.play();
       }

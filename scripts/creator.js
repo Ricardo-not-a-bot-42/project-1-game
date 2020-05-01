@@ -464,6 +464,54 @@ class Creator {
         'stop',
       ])
     );
+    this.enemies.push(
+      this.createEnemy(450, 875, [
+        '2-left',
+        '3-up',
+        '5-right',
+        'stop',
+        '6-right',
+        'stop',
+        '5-right',
+        'stop',
+        '11-down',
+        'stop',
+        '3-down',
+        '8-left',
+        'stop',
+        '5-left',
+        '3-up',
+        'stop',
+        '4-left',
+        '8-up',
+        '3-right',
+        'stop',
+      ])
+    );
+    this.enemies.push(
+      this.createEnemy(1125, 575, [
+        '1-down',
+        '4-right',
+        '3-down',
+        '9-left',
+        'stop',
+        '6-left',
+        '4-down',
+        '5-right',
+        'stop',
+        '1-down',
+        '9-right',
+        'stop',
+        '1-right',
+        '8-up',
+        '11-left',
+        'stop',
+        '1-up',
+        '7-right',
+        'stop',
+      ])
+    );
+    this.enemies.push(this.createEnemy(1125, 575, ['1-down']));
   }
 
   createItemList(reDraw) {
@@ -491,7 +539,7 @@ class Creator {
       [this.walls[12].x - 75, this.walls[12].y + 150],
       [this.walls[13].x - 75, this.walls[13].y + 300],
       [this.walls[7].x + 75, this.walls[7].y + 75],
-      [this.walls[4].x + 150, this.walls[4].y],
+      [this.walls[4].x + 225, this.walls[4].y],
     ];
     console.log(this.walls[11]);
     let randomPos = Math.floor(Math.random() * positions.length);
@@ -503,8 +551,8 @@ class Creator {
     let positions = [
       [this.walls[12].x - 75, this.walls[12].y],
       [this.walls[13].x - 75, this.walls[13].y + 75],
-      [this.walls[3].x + 150, this.walls[3].y],
-      [this.walls[5].x + 150, this.walls[5].y],
+      [this.walls[3].x + 225, this.walls[3].y],
+      [this.walls[5].x + 225, this.walls[5].y],
       [this.walls[10].x + 975, this.walls[10].y],
     ];
     console.log(this.walls[11]);

@@ -2,8 +2,8 @@ class Enemy {
   constructor(x, y, game, moveSet) {
     this.x = x;
     this.y = y;
-    this.width = 125;
-    this.height = 125;
+    this.width = 100;
+    this.height = 100;
     this.speed = 30;
     this.iterationSpeed;
     this.sprayedTime = 0;
@@ -13,19 +13,31 @@ class Enemy {
 
     this.game = game;
     this.image = new Image();
-    this.image.src = '/images/Enemy.png';
+    this.image.src = '/images/Enemy-R.png';
   }
 
   initialize() {
     this.image.addEventListener('load', () => {
-      this.game.context.drawImage(this.image, this.x, this.y);
-      this.width = this.image.width;
-      this.height = this.image.height;
+      this.game.context.drawImage(
+        this.image,
+        this.x,
+        this.y,
+        this.width,
+        this.height
+      );
+      //this.width = this.image.width;
+      //this.height = this.image.height;
     });
   }
 
   draw() {
-    this.game.context.drawImage(this.image, this.x, this.y);
+    this.game.context.drawImage(
+      this.image,
+      this.x,
+      this.y,
+      this.width,
+      this.height
+    );
   }
 
   autonomousMovement() {
@@ -86,7 +98,7 @@ class Enemy {
       this.pauseTime = 0;
       this.iteration++;
     } else {
-      this.iteration = 0;
+      // this.iteration = 0;
     }
   }
 
@@ -94,15 +106,27 @@ class Enemy {
     switch (direction) {
       case 0:
         this.y -= 75 / this.speed;
+        if (this.image.src !== '/images/Enemy-B.png') {
+          this.image.src = '/images/Enemy-B.png';
+        }
         break;
       case 1:
         this.x += 75 / this.speed;
+        if (this.image.src !== '/images/Enemy-R.png') {
+          this.image.src = '/images/Enemy-R.png';
+        }
         break;
       case 2:
         this.y += 75 / this.speed;
+        if (this.image.src !== '/images/Enemy-F.png') {
+          this.image.src = '/images/Enemy-F.png';
+        }
         break;
       case 3:
         this.x -= 75 / this.speed;
+        if (this.image.src !== '/images/Enemy-L.png') {
+          this.image.src = '/images/Enemy-L.png';
+        }
         break;
     }
   }
